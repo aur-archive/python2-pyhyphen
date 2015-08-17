@@ -1,0 +1,21 @@
+post_install() {
+  echo ">>> Installing default dictionary... en_US"
+
+  python2 -c "from hyphen.dictools import install; install('en_US')"
+
+  echo ">>> Done."
+  echo ">>>"  
+  echo ">>> NOTE: All dictionaries will be removed upon uninstallation."
+}
+
+pre_remove() {
+  HYPHEN_DIR=`python2 -c "import os, hyphen; print os.path.dirname(hyphen.__file__)"`
+
+  if [ -d "${HYPHEN_DIR}" ]; then
+    echo ">>> Removing all dictionaries..."
+    rm -f "${HYPHEN_DIR}"/*.dic
+
+    echo ">>> Removing dictionary info..."
+    rm -f "${HYPHEN_DIR}/hyphen_dict_info.pickle"
+  fi
+}
